@@ -8,3 +8,7 @@
 ```shell
 streamlit run app.py
 ```
+alternatively, 
+```shell
+chmod +x ./run.sh && ./run.sh
+```
