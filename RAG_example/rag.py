@@ -3,10 +3,11 @@ from langchain_groq.chat_models import ChatGroq
 from langchain_community.embeddings.ollama import OllamaEmbeddings
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_community.chat_models.ollama import ChatOllama
-from langchain.schema.output_parser import StrOutputParser
+from langchain_core.output_parsers import StrOutputParser
 from langchain_community.document_loaders.pdf import PyPDFLoader
+from langchain_community.document_loaders.directory import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema.runnable import RunnablePassthrough
+from langchain_core.runnables import RunnablePassthrough
 from langchain.prompts import PromptTemplate
 from langchain.vectorstores.utils import filter_complex_metadata
 
@@ -23,7 +24,10 @@ class ChatPDF:
             api_key="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"
         )
         # self.model = ChatOllama(model="mistral:7b-instruct-v0.2-fp16")
-        self.text_splitter = RecursiveCharacterTextSplitter(chunk_size=1024, chunk_overlap=100)
+        self.text_splitter = RecursiveCharacterTextSplitter(
+            chunk_size=1024, 
+            chunk_overlap=100
+        )
         self.prompt = PromptTemplate.from_template(
             """
             <s> [INST] You are an assistant for question-answering tasks. Use the following pieces of retrieved
@@ -42,6 +46,13 @@ class ChatPDF:
             pdf_file_path: str, the path of the PDF file to load 
         """
         docs = PyPDFLoader(file_path=pdf_file_path).load()
+        # docs = DirectoryLoader(
+        #     path=pdf_file_path,
+        #     glob="**/*.txt",
+        #     show_progress=True,
+        #     silent_errors=True,
+        #     loader_kwargs={'autodetect_encoding': True},
+        # ).load()
         chunks = self.text_splitter.split_documents(docs)
         chunks = filter_complex_metadata(chunks)
 
