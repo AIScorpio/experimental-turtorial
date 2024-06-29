@@ -21,7 +21,7 @@ class ChatPDF:
             model="llama3-70b-8192",
             # model="mixtral-8x7b-32768",
             temperature=0.5,
-            api_key="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"
+            api_key="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"
         )
         # self.model = ChatOllama(model="mistral:7b-instruct-v0.2-fp16")
         self.text_splitter = RecursiveCharacterTextSplitter(
